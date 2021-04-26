@@ -25,34 +25,17 @@ public class JobService {
         this.jobRepository = jobRepository;
     }
 
-    public List<Job> getAllJobs(int page, int size){
-        Pageable pageable = PageRequest.of(page,size, Sort.by("name"));
-        return jobRepository.findAll(pageable).getContent();
+    @Transactional
+    public List<Job> getJobs(String key,int page,int size){
+        boolean active = false;
+        Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
+        return jobRepository.getJobs(key,pageable).getContent();
     }
+
     public Job addOrUpdateJob(Job job){
         return jobRepository.save(job);
     }
 
-    public List<Job> getJobsByKey(String key,int page,int size){
-        Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
-        return jobRepository.findByNameContaining(key,pageable).getContent();
-    }
-
-    public Job getJobsByCode(String code){
-        return jobRepository.findByCode(code);
-    }
-    public List<Job> getJobsByStatus(String status,int page,int size){
-        boolean active = false;
-        if(status.equalsIgnoreCase("active")){
-            active = true;
-        } else if(status.equalsIgnoreCase("notactive")){
-            active = false;
-        } else {
-            return new ArrayList<Job>();
-        }
-        Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
-        return jobRepository.findByStatus(active,pageable).getContent();
-    }
     @Transactional
     public int updateJobStatus(boolean status, long id){
         return jobRepository.editStatus(status, id);
