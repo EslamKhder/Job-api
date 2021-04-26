@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // http://localhost:8080
@@ -39,13 +40,25 @@ public class JobController {
         return new ResponseEntity<Job>(jobService.addOrUpdateJob(job),HttpStatus.OK);
     }
 
-    // http://localhost:8080/api/jobs/search?name={value}&page={value}&size={value}
-    @GetMapping("jobs/search")
+    // http://localhost:8080/api/jobs/search/key?name={value}&page={value}&size={value}
+    @GetMapping("jobs/search/key")
     public ResponseEntity<List<Job>> getJobByKey(@RequestParam String name,@RequestParam int page,@RequestParam int size){
         return new ResponseEntity<List<Job>>(jobService.getJobsByKey(name,page,size),HttpStatus.OK);
     }
 
-    // http://localhost:8080/api/jobs/status?id={value}?status=
+    // http://localhost:8080/api/jobs/search/code?code={value}&page={value}&size={value}
+    @GetMapping("jobs/search/code")
+    public ResponseEntity<Job> getJobByCode(@RequestParam String code){
+        return new ResponseEntity<Job>(jobService.getJobsByCode(code),HttpStatus.OK);
+    }
+
+    // http://localhost:8080/api/jobs/search/status?status={value}&page={value}&size={value}
+    @GetMapping("jobs/search/status")
+    public ResponseEntity<List<Job>> getJobByStatus(@RequestParam String status,@RequestParam int page,@RequestParam int size){
+        return new ResponseEntity<List<Job>>(jobService.getJobsByStatus(status,page,size),HttpStatus.OK);
+    }
+
+    // http://localhost:8080/api/jobs/status?id={value}?status={value}
     @PutMapping("jobs/status")
     public ResponseEntity<Integer> editStatus(@RequestParam int status, @RequestParam long id){
         boolean active = (status ==1)? true : false;

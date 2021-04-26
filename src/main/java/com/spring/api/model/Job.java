@@ -22,6 +22,10 @@ public class Job {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "code",unique = true)
+    private String code;
+
     @Column(name = "status")
     private boolean status;
+
 }
